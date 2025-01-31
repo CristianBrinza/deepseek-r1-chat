@@ -1,0 +1,219 @@
+/* ------------------ Existing Styles (unchanged) ------------------ */
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #FFFEFF;
+    -webkit-text-size-adjust: 100%;
+    font-feature-settings: normal;
+    font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol;
+    color: #333;
+    tab-size: 4;
+}
+p {
+    margin: 0;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 750px;
+    margin: 5px auto;
+    padding: 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.chat-title {
+    margin-bottom: 20px;
+    text-align: left;
+    color: #444;
+    width: 100%;
+    padding: 10px;
+    border-radius: 100px;
+    border: 1px solid #F4F3F3;
+    font-size: 12px;
+}
+.chat-title select{
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    outline: none; /* Removes focus outline */
+    background: transparent; /* Makes background transparent */
+    appearance: none; /* Removes default styling in some browsers */
+    -webkit-appearance: none; /* Removes default styling in WebKit browsers */
+    -moz-appearance: none; /* Removes default styling in Firefox */
+}
+
+.chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.message {
+    /*display: flex;*/
+    margin-bottom: 15px;
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 20px;
+    line-height: 1.4;
+    box-sizing: border-box;
+}
+
+.user-message {
+    align-self: flex-end;
+    justify-content: flex-end;
+    background-color: #F4F3F3;
+    color: #5E5D5D;
+    border-bottom-right-radius: 0;
+}
+
+.ai-message {
+    align-self: flex-start;
+    background-color: transparent;
+    color: #333;
+    border: 1px solid #dcdcdc;
+    border-bottom-left-radius: 0;
+}
+
+.thinking {
+    font-style: italic;
+    color: #888;
+}
+
+/* Code Block Styling */
+.code-block-wrapper {
+    position: relative;
+    background: #272822;
+    color: #f8f8f2;
+    padding: 12px;
+    border-radius: 6px;
+    margin: 8px 0;
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+.code-block-wrapper pre {
+    margin: 0;
+    overflow-x: auto;
+    white-space: pre-wrap; /* Ensure it wraps */
+}
+
+.code-block-wrapper code {
+    font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
+    word-wrap: break-word;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+
+/* Copy Button */
+.copy-btn {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    padding: 4px 6px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.copy-btn:hover {
+    opacity: 0.8;
+}
+
+/* Input Box */
+.input-container {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 100px;
+    border: 1px solid #F4F3F3;
+    background: #F4F3F3;
+    color: #5E5D5D;
+    margin-right: 10px;
+    box-sizing: border-box;
+}
+
+.send-btn {
+    background-color: #676668;
+    color: white;
+    border: none;
+    border-radius: 100px;
+    font-size: 1rem;
+    padding: 12px 16px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.send-btn:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.thinking-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-style: italic;
+    color: #888;
+    animation: fadeIn 0.3s forwards;
+}
+
+@keyframes dots {
+    0% { content: "."; }
+    33% { content: ".."; }
+    66% { content: "..."; }
+}
+
+.thinking-message::after {
+    content: ".";
+    animation: dots 1s infinite steps(3);
+}
+
+/* ---- Additional optional styling for markdown tables, if needed ---- */
+table {
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+table, th, td {
+    border: 1px solid #ccc;
+}
+th, td {
+    padding: 8px 12px;
+    vertical-align: top;
+}
+
+
+.ai-message table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.ai-message th, .ai-message td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.ai-message th {
+    background-color: #f4f4f4;
+}
