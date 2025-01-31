@@ -5,27 +5,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const modelSelect = document.getElementById("model-select");
     const ollamaEndpoint = "http://localhost:11434/api/generate";
 
+    // Disables the send button
+    function disableSendButton() {
+        sendBtn.disabled = true;
+        sendBtn.style.opacity = "0.6";
+        sendBtn.style.cursor = "not-allowed";
+    }
+
+    // Enables the send button
+    function enableSendButton() {
+        sendBtn.disabled = false;
+        sendBtn.style.opacity = "1";
+        sendBtn.style.cursor = "pointer";
+    }
+
     // Removes <think>...</think> tags from responses
     function cleanResponse(str) {
         return str.replace(/<think>[\s\S]*?<\/think>/gi, '');
     }
-
-    // Safely escape HTML in code blocks
-    function escapeHTML(str) {
-        return str
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;");
-    }
-
-    // Copy code to clipboard
-    window.copyCode = function (code) {
-        navigator.clipboard.writeText(code).then(() => {
-            alert("Code copied!");
-        });
-    };
 
     // Uses marked.js for proper Markdown rendering
     function formatMarkdown(text) {
@@ -43,18 +40,49 @@ document.addEventListener("DOMContentLoaded", () => {
         chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
-    // Send a user message and handle the streaming AI response
+    // Show the "Thinking..." message
+    function showThinking() {
+        const thinkingDiv = document.createElement("div");
+        thinkingDiv.classList.add("thinking-message");
+        thinkingDiv.id = "thinking-message";
+        thinkingDiv.innerText = "Thinking...";
+        chatHistory.appendChild(thinkingDiv);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    // Hide the "Thinking..." message
+    function hideThinking() {
+        const thinkingDiv = document.getElementById("thinking-message");
+        if (thinkingDiv) {
+            thinkingDiv.remove();
+        }
+    }
+
+    // Update the *last* AI message in the chat with Markdown
+    function updateLastAIMessage(text) {
+        const aiMessages = document.querySelectorAll(".ai-message");
+        if (!aiMessages.length) return;
+        aiMessages[aiMessages.length - 1].innerHTML = formatMarkdown(text);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    // Send a user message and handle the AI response
     async function sendMessage() {
         const message = chatInput.value.trim();
         if (!message) return;
 
         console.log("User message (raw):", message);
-
         const selectedModel = modelSelect.value;
 
         // Append user message
         appendMessage("user", message);
         chatInput.value = "";
+
+        // Disable the send button
+        disableSendButton();
+
+        // Show "Thinking..." message
+        showThinking();
 
         // Prepare a new AI message container
         appendMessage("ai", "");
@@ -79,6 +107,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const decoder = new TextDecoder("utf-8");
             let done = false;
             let buffer = "";
+
+            // Hide "Thinking..." before response starts
+            hideThinking();
 
             while (!done) {
                 const { value, done: readerDone } = await reader.read();
@@ -116,15 +147,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         } catch (err) {
             appendMessage("ai", `**Error:** ${err.message}`);
+        } finally {
+            // Re-enable send button after AI response is completed
+            enableSendButton();
         }
-    }
-
-    // Update the *last* AI message in the chat with Markdown
-    function updateLastAIMessage(text) {
-        const aiMessages = document.querySelectorAll(".ai-message");
-        if (!aiMessages.length) return;
-        aiMessages[aiMessages.length - 1].innerHTML = formatMarkdown(text);
-        chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
     // Event listeners
